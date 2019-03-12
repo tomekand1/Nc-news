@@ -7,12 +7,8 @@ const request = supertest(app);
 const connection = require('../db/connection');
 
 describe('/api/topics', () => {
-  beforeEach(() => {
-    connection.seed.run();
-  });
-  after(() => {
-    connection.destroy();
-  });
+  beforeEach(() => connection.seed.run());
+  after(() => connection.destroy());
   describe('GET /api/topics', () => {
     it('GET alltopics with status 200', () => {
       return request

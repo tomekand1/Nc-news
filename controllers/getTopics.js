@@ -1,3 +1,7 @@
-exports.getTopics = () => {
-  console.log('hello from controller topics');
+const { allTopics } = require('../models/allTopics');
+
+exports.getTopics = (req, res, next) => {
+  allTopics().then(topics => {
+    res.status(200).send({ topics });
+  });
 };
