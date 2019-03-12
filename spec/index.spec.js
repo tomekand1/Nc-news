@@ -1,5 +1,8 @@
 process.env.NODE_ENV = 'test';
+const chai = require('chai');
+chai.use(require('chai-sorted'));
 const { expect } = require('chai');
+
 const supertest = require('supertest');
 const app = require('../app');
 
@@ -20,12 +23,12 @@ describe('/api', () => {
         }));
   });
   describe('POST /api/topics', () => {
-    it('POST /api/topics ', () => {
-      return request
+    it('POST /api/topics ', () =>
+      request
         .post('/api/topics')
         .send({
           slug: 'coding',
-          description: 'Tom is a the best coder in the word',
+          description: 'Tom is a the best coder in the word'
         })
         .expect(201)
         .then(res => {
@@ -34,19 +37,95 @@ describe('/api', () => {
             'description'
           );
           expect(res.body.insertedtopic[0].slug).to.equal('coding');
-        });
-    });
+        }));
   });
   describe('/articles', () => {
     describe('GET /articles', () => {
-      it('GET articles with keys author, title article_id, topic, created_at, vote comment_count', () => {
-        return request
+      it('GET articles with keys author, title article_id, topic, created_at, vote comment_count', () =>
+        request
           .get('/api/articles')
           .expect(200)
           .then(res => {
             expect(res.body.articles).to.be.an('array');
-            expect(res.body.articles[0]).to.contain.keys('author', 'title');
+            expect(res.body.articles[0]).to.contain.keys(
+              'author',
+              'title',
+              'article_id',
+              'topic',
+              'created_at',
+              'votes'
+            );
+          }));
+      it('GET comment_count to be equal amount of coments from each article', () => {
+        return request
+          .get('/api/articles')
+          .expect(200)
+          .then(res => {
+            expect(res.body.articles[10].comment_count).to.equal('0');
           });
+      });
+    });
+    describe('POST /articles', () => {
+      it('POST it should post an new article and return its body', () => {
+        const input = {
+          title: 'Moustache',
+          body: 'Have you seen the size of that thing?',
+          votes: 0,
+          topic: 'mitch',
+          author: 'butter_bridge'
+        };
+        return request
+          .post('/api/articles')
+          .send(input)
+          .expect(201)
+          .then(res => {
+            expect(res.body.insertedArticle[0]).to.contain.keys(
+              'title',
+              'votes'
+            );
+            expect(res.body.insertedArticle[0].author).to.equal(
+              'butter_bridge'
+            );
+          });
+      });
+    });
+    describe('/:article_id', () => {
+      describe('GET /article/query ', () => {
+        it('GET articles filtered by author', () =>
+          request
+            .get('/api/articles?author=butter_bridge')
+            .expect(200)
+            .then(res => {
+              expect(res.body.articles).to.have.lengthOf(3);
+            }));
+        it('GET articles filtered by topic', () => {
+          return request
+            .get('/api/articles?topic=mitch')
+            .expect(200)
+            .then(res => {
+              expect(res.body.articles).to.have.lengthOf(11);
+            });
+        });
+        it('GET articles filtered by author and topic', () => {
+          return request
+            .get('/api/articles?author=butter_bridge&topic=mitch')
+            .expect(200)
+            .then(res => {
+              expect(res.body.articles).to.have.lengthOf(3);
+            });
+        });
+        it('GET articles sorted by author in ascending order ', () => {
+          return request
+            .get('/api/articles?sort_by=article_id&order=asc')
+            .expect(200)
+            .then(res => {
+              expect(
+                res.body.articles[0],
+                res.body.articles[1],
+                res.body.articles[2]
+              ).to.be.ascendingBy('article_id');
+            });
+        });
       });
     });
   });

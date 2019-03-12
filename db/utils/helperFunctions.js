@@ -7,9 +7,16 @@ exports.dataToSql = arr => arr.map(el => ({
   votes: el.votes,
 }));
 
+exports.articleId = (obj) => {
+  const result = obj.reduce((map, obj) => {
+    map[obj.title] = obj.article_id;
+    return map;
+  }, {});
+  return result;
+};
 
-exports.newCommentsObj = arr => arr.map(el => ({
-
+exports.newCommentsObj = (arr, obj) => arr.map(el => ({
+  article_id: obj[el.belongs_to],
   body: el.body,
   author: el.created_by,
   votes: el.votes,

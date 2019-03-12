@@ -35,6 +35,7 @@ describe('dataToSql', () => {
 
 describe('newCommentsObj()', () => {
   it('it should return new formated object', () => {
+    const obj = { 'Tomasz king of the universe': 1 };
     const input = [
       {
         body: 'haha',
@@ -47,12 +48,12 @@ describe('newCommentsObj()', () => {
     const expected = [
       {
         body: 'haha',
-
+        article_id: 1,
         author: 'tickle122',
         votes: -1,
         created_at: new Date(input[0].created_at),
       },
     ];
-    expect(newCommentsObj(input)).to.eql(expected);
+    expect(newCommentsObj(input, obj)).to.eql(expected);
   });
 });

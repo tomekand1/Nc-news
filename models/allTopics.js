@@ -1,14 +1,9 @@
 const connection = require('../db/connection');
 
-exports.allTopics = () =>
-  connection
-    .select('*')
-    .from('topics')
-    .returning('*');
+exports.allTopics = () => connection.select('*').from('topics');
 
-exports.addTopic = topic => {
-  return connection
+exports.addTopic = topic =>
+  connection
     .insert(topic)
     .into('topics')
     .returning('*');
-};

@@ -27,6 +27,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "chai-datetime": "^1.5.0",
+    "chai-sorted": "^0.2.0",
     "express": "^4.16.4",
     "knex": "^0.15.2",
     "pg": "^7.8.2"
