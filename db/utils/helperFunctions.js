@@ -9,7 +9,7 @@ exports.dataToSql = arr => arr.map(el => ({
 
 
 exports.newCommentsObj = arr => arr.map(el => ({
-  article_id: el.article_id,
+
   body: el.body,
   author: el.created_by,
   votes: el.votes,
