@@ -68,7 +68,7 @@ describe('/api', () => {
       it('POST it should post an new article and return its body', () => {
         const input = {
           title: 'Moustache',
-          body: 'Have you seen the size of that thing?',
+          body: 'Tom King of the word',
           votes: 0,
           topic: 'mitch',
           author: 'butter_bridge'
@@ -153,11 +153,42 @@ describe('/api', () => {
             expect(res.body.patchedArticle[0].votes).to.equal(0);
           });
       });
+      it('DELETE it should delete an article by given id and send status code 204', () => {
+        return request.delete('/api/articles/1').expect(204);
+      });
     });
   });
-  describe.only('DELETE /article', () => {
-    it('it should delete an article by given id and send status code 204', () => {
-      return request.delete('/api/articles/1').expect(204);
+
+  describe.only('/comments', () => {
+    describe('GET /api/articles/:article_id/comments', () => {
+      it('GET should return all the comments belonging to given article', () => {
+        return request
+          .get('/api/articles/1/comments')
+          .expect(200)
+          .then(res => {
+            expect(res.body.comments).lengthOf(13);
+            expect(
+              res.body.comments[0].article_id && res.body.comments[1].article_id
+            ).to.equal(1);
+          });
+      });
+      it('POST should post new comment to an given article_id', () => {
+        const input = {
+          comment_id: 2,
+          author: 'Tom King of the word',
+          article_id: 1,
+          votes: 9999999999999999999999999999999999999999999,
+          body:
+            ' Remember: There are many beautiful and wonderful things to discover about our loving, kind, wise king Tom'
+        };
+        return request
+          .post('/api/articles/1/comments')
+          .send(input)
+          .expect(201)
+          .then(res => {
+            console.log(res.body.comment);
+          });
+      });
     });
   });
 });
