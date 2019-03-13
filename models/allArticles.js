@@ -12,6 +12,13 @@ exports.allArticles = (query, sort_by = 'created_at', order = 'desc') =>
     .leftJoin('comments', 'comments.article_id', 'articles.article_id')
     .groupBy('articles.article_id');
 
+exports.showArticleById = article_id => {
+  return connection
+    .select('*')
+    .from('articles')
+    .where(article_id);
+};
+
 exports.addArticle = newArticle =>
   connection
     .insert(newArticle)

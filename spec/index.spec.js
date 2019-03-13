@@ -71,7 +71,7 @@ describe('/api', () => {
           body: 'Tom King of the word',
           votes: 0,
           topic: 'mitch',
-          author: 'butter_bridge'
+          username: 'butter_bridge'
         };
         return request
           .post('/api/articles')
@@ -126,6 +126,16 @@ describe('/api', () => {
     });
   });
   describe(' /api/articles/:article_id', () => {
+    describe('GET /article', () => {
+      it('GST it should return an article by given id', () => {
+        return request
+          .get('/api/articles/1')
+          .expect(200)
+          .then(res => {
+            expect(res.body.article[0].article_id).to.equal(1);
+          });
+      });
+    });
     describe('PATCH /article', () => {
       it('PATCH it should patch article by article_id and increment votes by 55', () => {
         const input = {
@@ -159,7 +169,7 @@ describe('/api', () => {
     });
   });
 
-  describe.only('/comments', () => {
+  describe('/comments', () => {
     describe('GET /api/articles/:article_id/comments', () => {
       it('GET should return all the comments belonging to given article', () => {
         return request
@@ -174,19 +184,57 @@ describe('/api', () => {
       });
       it('POST should post new comment to an given article_id', () => {
         const input = {
-          comment_id: 2,
-          author: 'Tom King of the word',
-          article_id: 1,
-          votes: 9999999999999999999999999999999999999999999,
+          username: 'butter_bridge',
           body:
             ' Remember: There are many beautiful and wonderful things to discover about our loving, kind, wise king Tom'
         };
         return request
-          .post('/api/articles/1/comments')
+          .post('/api/articles/2/comments')
           .send(input)
           .expect(201)
           .then(res => {
-            console.log(res.body.comment);
+            expect(res.body.comment[0]).to.contain.keys(
+              'article_id',
+              'author',
+              'body',
+              'comment_id',
+              'created_at',
+              'votes'
+            );
+          });
+      });
+    });
+    describe('PATCH /:comment_id', () => {
+      it('PATCH it should increment votes in given comment ', () => {
+        const input = {
+          inc_votes: 1
+        };
+        return request
+          .patch('/api/comments/1')
+          .send(input)
+          .expect(201)
+          .then(res => {
+            expect(res.body.pachedComment[0].comment_id).to.equal(1);
+            expect(res.body.pachedComment[0].votes).to.equal(17);
+          });
+      });
+      it('DELETE it should delete comment by its id', () => {
+        return request.delete('/api/comments/1').expect(204);
+      });
+    });
+  });
+  describe.only('/users', () => {
+    describe('GET/ /api/users', () => {
+      it('GET it should return all the users from database', () => {
+        return request
+          .get('/api/users')
+          .expect(200)
+          .then(res => {
+            expect(res.body.users).to.contain.keys(
+              'username',
+              'avatar_url',
+              'name'
+            );
           });
       });
     });

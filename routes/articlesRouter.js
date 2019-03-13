@@ -9,7 +9,8 @@ const {
   getArticles,
   postArticle,
   patchArticle,
-  deleteArticleById
+  deleteArticleById,
+  getArticleById
 } = require('../controllers/articles');
 
 articleRouter
@@ -24,6 +25,7 @@ articleRouter
 
 articleRouter
   .route('/:article_id')
+  .get(getArticleById)
   .patch(patchArticle)
   .delete(deleteArticleById);
 

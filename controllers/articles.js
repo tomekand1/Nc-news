@@ -2,7 +2,8 @@ const {
   allArticles,
   addArticle,
   patchArticleById,
-  deleteArticleByIdAndAssociatedValues
+  deleteArticleByIdAndAssociatedValues,
+  showArticleById
 } = require('../models/allArticles');
 
 exports.getArticles = (req, res, next) => {
@@ -25,18 +26,37 @@ exports.getArticles = (req, res, next) => {
   });
 };
 
+exports.getArticleById = (req, res, next) => {
+  const id = req.params.article_id;
+  const articleID = id
+    ? {
+        article_id: id
+      }
+    : {};
+
+  showArticleById(articleID).then(article => {
+    res.status(200).send({ article });
+  });
+};
+
 exports.postArticle = (req, res, next) => {
   const newArticle = req.body;
-  addArticle(newArticle).then(insertedArticle => {
-    res.status(201).send({
-      insertedArticle
-    });
-  });
+
+  delete Object.assign(newArticle, {
+    author: newArticle.username
+  }).username;
+
+  addArticle(newArticle)
+    .then(insertedArticle => {
+      res.status(201).send({
+        insertedArticle
+      });
+    })
+    .catch(next);
 };
 
 exports.patchArticle = (req, res, next) => {
   const { article_id } = req.params;
-
   const { inc_votes } = req.body;
 
   patchArticleById(article_id, inc_votes).then(patchedArticle => {
