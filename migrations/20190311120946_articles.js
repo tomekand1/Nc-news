@@ -4,9 +4,19 @@ exports.up = function (knex, Promise) {
     article_table.string('title', 100).notNull();
     article_table.text('body').notNull();
     article_table.integer('votes').defaultTo(0);
-    article_table.string('topic').references('slug').inTable('topics');
-    article_table.string('author').references('username').inTable('users');
-    article_table.date('created_at', 6).defaultTo(knex.fn.now(6)).notNullable();
+    article_table
+      .string('topic')
+      .references('slug')
+      .inTable('topics');
+    article_table
+      .string('author')
+      .references('username')
+      .inTable('users')
+      .onDelete('cascade');
+    article_table
+      .date('created_at', 6)
+      .defaultTo(knex.fn.now(6))
+      .notNullable();
   });
 };
 exports.down = function (knex, Promise) {

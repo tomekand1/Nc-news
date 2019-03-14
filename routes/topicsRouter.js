@@ -1,13 +1,12 @@
 const topicsRouter = require('express').Router();
 
 const { getTopics, postTopic } = require('../controllers/topics');
+const { handle405 } = require('../errors');
 
 topicsRouter
   .route('/')
   .get(getTopics)
   .post(postTopic)
-  .all((req, res) => {
-    res.status(405).send({ msg: 'Method not allowed' });
-  });
+  .all(handle405);
 
 module.exports = topicsRouter;
