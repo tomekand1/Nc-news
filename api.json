@@ -1,0 +1,52 @@
+{
+  "GET / POST topics": {
+    "method": "GET",
+    "/api/topics": "Responds with array of topics",
+    "method": "POST",
+    "/api/topics": "Request body accepts: 'slug' which must be unique, description - text"
+  },
+  "GET / POST articles": {
+    "method": "GET",
+    "/api/articles": "Responds with array of articles including 'author', 'title', 'article_id', 'topic', 'created_at', 'votes', 'comment_count'",
+    "method": "POST",
+    "/api/articles": "Request body accepts an object containing the following properties: 'title', 'body', 'topic', 'username', and responds with posted article "
+  },
+  "Articles queries": {
+    "/api/articles?author": "filters the articles by the username value specified in the query",
+    "/api/articles?topic": "filters the articles by the topic value specified in the query",
+    "/api/articles?sort_by": "sorts the articles by any valid column (defaults to date)",
+    "/api/articles?order": "which can be set to asc or desc for ascending or descending (defaults to descending)"
+  },
+  "Articles params": {
+    "method": "GET",
+    "/api/articles/:article_id": "Responds with: 'author', 'title', 'body', 'topis', 'created_at', 'votes', 'comment_count'",
+    "method": "PATCH",
+    "/api/articles/:article_id": "Request body accept object with key: inc_votes and amout of votes to update responds with updated comment",
+    "method": "DELETE",
+    "/api/articles/:article_id": "delete the given article by article_id"
+  },
+  "GET / POST / DELETE Comments by article_id": {
+    "method": "GET",
+    "/api/articles/:article_id/comments": "Responds with an array of comments for the given article_id with properties 'comment_id', 'votes', 'created_at', 'author', 'body'",
+    "method": "POST",
+    "/api/articles/:article_id/comments": "Request body accepts: object with fallowing properties: 'username', 'body', responds with added comment",
+    "method": "PATCH",
+    "/api/comments/:comment_id": "Request body accept object with key inc_votes: newVote amount responds with updated comment",
+    "method": "delete",
+    "/api/comments/:comment_id": "Deletes the given comment by comment_id, and responds with status 204"
+  },
+  "Article queries": {
+    "/api/articles/:article_id/comments?sort_by": "which sorts the articles by any valid column (defaults to date)",
+    "/api/articles/:article_id/comments?order": " which can be set to asc or desc for ascending or descending (defaults to descending)"
+  },
+
+  "GET / POST Users": {
+    "method": "GET",
+    "/api/users": "Responds with, an array of user objects, each of which should have the following properties: 'username', 'avatar_url', 'name'",
+    "method": "POST",
+    "/api/users": "Request body accepts an object containing the following properties: 'username', 'avatar_url', 'name', responds with a posted user"
+  },
+  "GET User by username": {
+    "/api/users/:username": "Responds with a user object which should have the following properties: 'username', 'avatar', 'name'"
+  }
+}
