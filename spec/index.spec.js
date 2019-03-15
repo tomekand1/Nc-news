@@ -23,6 +23,18 @@ describe('/api', () => {
   });
 
   describe('/topics', () => {
+    it('error POST status: 422 client sends a body with a duplicate slug ', () => {
+      request
+        .post('/api/topics')
+        .send({
+          slug: 'mitch',
+          description: 'Tom is a the best coder in the word'
+        })
+        .expect(422)
+        .then(res => {
+          expect(res.body.msg).to.equal('null or missing value');
+        });
+    });
     it('error 404 on non existent route on /api/topics/ ', () =>
       request
         .get('/api/topics/bad-route')
@@ -49,14 +61,18 @@ describe('/api', () => {
         })
         .expect(201)
         .then(res => {
-          expect(res.body.insertedtopic[0]).to.contain.keys(
-            'slug',
-            'description'
-          );
-          expect(res.body.insertedtopic[0].slug).to.equal('coding');
+          expect(res.body.topic).to.contain.keys('slug', 'description');
+          expect(res.body.topic.slug).to.equal('coding');
         }));
   });
   describe('/articles', () => {
+    it('error 404 on non existent route on /users ', () =>
+      request
+        .get('/api/articles/abc')
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal('invalid value');
+        }));
     describe('GET /articles', () => {
       it('GET articles with keys author, title article_id, topic, created_at, vote comment_count', () =>
         request
@@ -106,6 +122,14 @@ describe('/api', () => {
       });
     });
     describe('/:article_id', () => {
+      it('will ignore an invalid sort_by query', () => {
+        return request
+          .get('/api/articles?sort_by=t')
+          .expect(400)
+          .then(res => {
+            expect(res.body.msg).to.equal('invalid value');
+          });
+      });
       describe('GET /article/query ', () => {
         it('GET articles filtered by author', () =>
           request
@@ -140,12 +164,12 @@ describe('/api', () => {
   });
   describe(' /api/articles/:article_id', () => {
     describe('GET /article', () => {
-      it('GST it should return an article by given id', () =>
+      it('GET it should return an article by given id', () =>
         request
           .get('/api/articles/1')
           .expect(200)
           .then(res => {
-            expect(res.body.article[0].article_id).to.equal(1);
+            expect(res.body.article.article_id).to.equal(1);
           }));
     });
     describe('PATCH /article', () => {
@@ -156,10 +180,10 @@ describe('/api', () => {
         return request
           .patch('/api/articles/1')
           .send(input)
-          .expect(201)
+          .expect(200)
           .then(res => {
-            expect(res.body.patchedArticle[0].article_id).to.equal(1);
-            expect(res.body.patchedArticle[0].votes).to.equal(155);
+            expect(res.body.patchedArticle.article_id).to.equal(1);
+            expect(res.body.patchedArticle.votes).to.equal(155);
           });
       });
       it('PATCH it should patch article by article_id and decrement votes by 100', () => {
@@ -169,14 +193,19 @@ describe('/api', () => {
         return request
           .patch('/api/articles/1')
           .send(input)
-          .expect(201)
+          .expect(200)
           .then(res => {
-            expect(res.body.patchedArticle[0].article_id).to.equal(1);
-            expect(res.body.patchedArticle[0].votes).to.equal(0);
+            expect(res.body.patchedArticle.article_id).to.equal(1);
+            expect(res.body.patchedArticle.votes).to.equal(0);
           });
       });
+      it('DELETE it should give status code 400 when invalid id provided', () =>
+        request.delete('/api/articles/ww').expect(400));
+      it('DELETE it should give status code 404 when non existent id', () =>
+        request.delete('/api/articles/99').expect(404));
+
       it('DELETE it should delete an article by given id and send status code 204', () =>
-        request.delete('/api/articles/1').expect(204));
+        request.delete('/api/articles/4').expect(204));
     });
   });
 
@@ -209,9 +238,9 @@ describe('/api', () => {
         return request
           .post('/api/articles/2/comments')
           .send(input)
-          .expect(201)
+          .expect(200)
           .then(res => {
-            expect(res.body.comment[0]).to.contain.keys(
+            expect(res.body.comment).to.contain.keys(
               'article_id',
               'author',
               'body',
@@ -239,10 +268,10 @@ describe('/api', () => {
         return request
           .patch('/api/comments/1')
           .send(input)
-          .expect(201)
+          .expect(200)
           .then(res => {
-            expect(res.body.pachedComment[0].comment_id).to.equal(1);
-            expect(res.body.pachedComment[0].votes).to.equal(17);
+            expect(res.body.pachedComment.comment_id).to.equal(1);
+            expect(res.body.pachedComment.votes).to.equal(17);
           });
       });
       it('DELETE it should delete comment by its id', () =>
@@ -263,9 +292,7 @@ describe('/api', () => {
         })
         .expect(400)
         .then(res => {
-          expect(res.body.msg).to.equal(
-            'insert into "users" ("avatar_url", "name") values ($1, $2) returning * - null value in column "username" violates not-null constraint'
-          );
+          expect(res.body.msg).to.equal('invalid value');
         }));
     it('error 404 on non existent route on /users ', () =>
       request
@@ -306,7 +333,7 @@ describe('/api', () => {
           .get('/api/users/butter_bridge')
           .expect(200)
           .then(res => {
-            expect(res.body.user[0].username).to.equal('butter_bridge');
+            expect(res.body.user.username).to.equal('butter_bridge');
           }));
       it('POST user in to users', () => {
         const input = {
@@ -320,12 +347,12 @@ describe('/api', () => {
           .send(input)
           .expect(200)
           .then(res => {
-            expect(res.body.user[0].username).to.equal('tomTheking');
+            expect(res.body.user.username).to.equal('tomTheking');
           });
       });
     });
   });
-  describe.only('/API ', () => {
+  describe('/API ', () => {
     describe('JSON /api', () => {
       it('GET it should return an file in json format explaining endpoints', () => {
         request
