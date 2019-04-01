@@ -12,7 +12,7 @@ exports.handle405 = (req, res, next) => {
 exports.handle400 = (err, req, res, next) => {
   console.log(err.code);
   input = {
-    nullValue: 'invalid value'
+    nullValue: 'invalid value',
   };
   if (err.code === '23502' || err.code === '42703' || err.code === '22P02') {
     res.status(400).send({ msg: input.nullValue });
@@ -23,7 +23,7 @@ exports.handle400 = (err, req, res, next) => {
 
 exports.handle422 = (err, req, res, next) => {
   input = {
-    nullValue: 'null or missing value'
+    nullValue: 'null or missing value',
   };
   if (err.code === '23505') {
     res.status(422).send({ msg: input.nullValue });

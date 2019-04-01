@@ -2,7 +2,7 @@ const { allTopics, addTopic } = require('../models/allTopics');
 
 exports.getTopics = (req, res, next) => {
   allTopics()
-    .then(topics => {
+    .then((topics) => {
       res.status(200).send({ topics });
     })
     .catch(next);

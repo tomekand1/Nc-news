@@ -3,24 +3,26 @@ const {
   addArticle,
   patchArticleById,
   deleteArticleByIdAndAssociatedValues,
-  showArticleById
+  showArticleById,
 } = require('../models/allArticles');
 
 exports.getArticles = (req, res, next) => {
-  const { author, topic, sort_by, order } = req.query;
+  const {
+    author, topic, sort_by, order,
+  } = req.query;
 
   const query = author
     ? {
-        'articles.author': author
-      }
+      'articles.author': author,
+    }
     : topic
-    ? {
-        'articles.topic': topic
+      ? {
+        'articles.topic': topic,
       }
-    : {};
+      : {};
 
   allArticles(query, sort_by, order)
-    .then(articles => {
+    .then((articles) => {
       res.status(200).send({ articles });
     })
     .catch(next);
@@ -30,8 +32,8 @@ exports.getArticleById = (req, res, next) => {
   const id = req.params.article_id;
   const articleID = id
     ? {
-        article_id: id
-      }
+      article_id: id,
+    }
     : {};
 
   showArticleById(articleID)
@@ -45,13 +47,13 @@ exports.postArticle = (req, res, next) => {
   const newArticle = req.body;
 
   delete Object.assign(newArticle, {
-    author: newArticle.username
+    author: newArticle.username,
   }).username;
 
   addArticle(newArticle)
-    .then(insertedArticle => {
+    .then((insertedArticle) => {
       res.status(201).send({
-        insertedArticle
+        insertedArticle,
       });
     })
     .catch(next);
@@ -66,7 +68,7 @@ exports.patchArticle = (req, res, next) => {
   patchArticleById(article_id, votes)
     .then(([patchedArticle]) => {
       res.status(200).send({
-        patchedArticle
+        patchedArticle,
       });
     })
     .catch(next);
@@ -76,7 +78,7 @@ exports.deleteArticleById = (req, res, next) => {
   const { article_id } = req.params;
 
   deleteArticleByIdAndAssociatedValues(article_id)
-    .then(result => {
+    .then((result) => {
       result === 0 ? next({ status: 404 }) : res.sendStatus(204);
     })
     .catch(next);
