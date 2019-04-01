@@ -1,3 +1,4 @@
+const data = { test, development, production: development };
 const test = require('./test-data');
 const development = require('./development-data');
 
