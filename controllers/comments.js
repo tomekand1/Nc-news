@@ -1,7 +1,7 @@
 const {
   allCommentsByArticleId,
   postNewCommentByArticleId,
-  commentToBePached,
+  commentToBePatched,
   commentToBeDeleted
 } = require('../models/allComments');
 
@@ -38,9 +38,9 @@ exports.patchCommentById = (req, res, next) => {
 
   const votes = typeof inc_votes === 'number' ? inc_votes : 0;
 
-  commentToBePached(comment_id, votes)
-    .then(([pachedComment]) => {
-      res.status(200).send({ pachedComment });
+  commentToBePatched(comment_id, votes)
+    .then(([patchedComment]) => {
+      res.status(200).send({ patchedComment });
     })
     .catch(next);
 };

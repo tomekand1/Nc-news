@@ -89,7 +89,7 @@ describe('/api', () => {
               'votes'
             );
           }));
-      it('GET comment_count to be equal amount of coments from each article', () =>
+      it('GET comment_count to be equal amount of comments from each article', () =>
         request
           .get('/api/articles')
           .expect(200)
@@ -270,8 +270,8 @@ describe('/api', () => {
           .send(input)
           .expect(200)
           .then(res => {
-            expect(res.body.pachedComment.comment_id).to.equal(1);
-            expect(res.body.pachedComment.votes).to.equal(17);
+            expect(res.body.patchedComment.comment_id).to.equal(1);
+            expect(res.body.patchedComment.votes).to.equal(17);
           });
       });
       it('DELETE it should delete comment by its id', () =>
