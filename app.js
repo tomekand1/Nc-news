@@ -1,12 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const cors = require('cors');
 const app = express();
 const api = require('./routes/api');
 
-const {
-  handle404, handle400, handle500, handle422,
-} = require('./errors');
+const { handle404, handle400, handle500, handle422 } = require('./errors');
+
+app.use(cors());
 
 app.use(bodyParser.json());
 
