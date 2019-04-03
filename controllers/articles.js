@@ -51,9 +51,9 @@ exports.postArticle = (req, res, next) => {
   }).username;
 
   addArticle(newArticle)
-    .then((insertedArticle) => {
+    .then(([article]) => {
       res.status(201).send({
-        insertedArticle,
+        article,
       });
     })
     .catch(next);
