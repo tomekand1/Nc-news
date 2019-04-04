@@ -52,17 +52,18 @@ describe('/api', () => {
         }));
   });
   describe('POST /api/topics', () => {
-    it('POST /api/topics ', () =>
+    it.only('POST /api/topics ', () =>
       request
         .post('/api/topics')
         .send({
-          slug: 'coding',
+          slug: 'zz',
           description: 'Tom is a the best coder in the word'
         })
         .expect(201)
         .then(res => {
+          console.log(res.body);
           expect(res.body.topic).to.contain.keys('slug', 'description');
-          expect(res.body.topic.slug).to.equal('coding');
+          expect(res.body.topic.slug).to.equal('zz');
         }));
   });
   describe('/articles', () => {
