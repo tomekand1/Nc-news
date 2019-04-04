@@ -4,8 +4,8 @@ exports.up = function(knex, Promise) {
       .string('slug')
       .unique()
       .primary()
-      .notNull();
-    topic_table.text('description').notNull();
+      .notNullable();
+    topic_table.text('description').notNullable();
   });
 };
 
