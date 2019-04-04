@@ -329,6 +329,13 @@ describe('/api', () => {
           .then(res => {
             expect(res.body.user.username).to.equal('butter_bridge');
           }));
+      it('send status 404 with msg route not found when no existent user', () =>
+        request
+          .get('/api/users/no-exist')
+          .expect(404)
+          .then(res => {
+            expect(res.body.msg).to.equal('Route not Found');
+          }));
       it('POST user in to users', () => {
         const input = {
           username: 'tomTheking',
