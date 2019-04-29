@@ -68,9 +68,9 @@ directory: './db/migrations',
 
 module.exports = { ...baseConfig, ...dbConfig[ENV] };
 
-~~~~~~(if u are using Mac Os delete username and password from test and development)~~~~~~
+(if u are using Mac Os delete username and password from test and development)
 
-#### Run scripts in your terminal in that order:
+#### Step 3 - Run scripts in your terminal in that order:
 
 1. npm run setupDb
 2. npm run migrate
