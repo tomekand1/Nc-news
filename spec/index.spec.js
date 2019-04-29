@@ -52,7 +52,7 @@ describe('/api', () => {
         }));
   });
   describe('POST /api/topics', () => {
-    it.only('POST /api/topics ', () =>
+    it('POST /api/topics ', () =>
       request
         .post('/api/topics')
         .send({

@@ -1,5 +1,5 @@
-exports.up = function(knex, Promise) {
-  return knex.schema.createTable('users', user_table => {
+exports.up = function (knex, Promise) {
+  return knex.schema.createTable('users', (user_table) => {
     user_table
       .string('username')
       .unique()
@@ -9,6 +9,6 @@ exports.up = function(knex, Promise) {
   });
 };
 
-exports.down = function(knex, Promise) {
+exports.down = function (knex, Promise) {
   return knex.schema.dropTable('users');
 };

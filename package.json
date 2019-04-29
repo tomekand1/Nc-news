@@ -35,7 +35,8 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "knex": "^0.15.2",
-    "pg": "^7.8.2"
+    "pg": "^7.8.2",
+    "react-sticky-nav": "^3.1.5"
   },
   "devDependencies": {
     "chai": "^4.2.0",
