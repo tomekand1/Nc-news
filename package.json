@@ -14,6 +14,7 @@
     "posttest": "npm run lint",
     "setupDb": "psql -f ./db/setupdb.sql",
     "make-migration": "knex migrate:make",
+    "migrate": "knex migrate:latest",
     "seed": "knex seed:run",
     "start": "node listen.js"
   },
