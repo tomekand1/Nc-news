@@ -19,6 +19,7 @@ In main directory create file named knexFile.js
 
 ### add/copy that code:
 
+```
 const { DB_URL } = process.env;
 const ENV = process.env.NODE_ENV || 'development';
 
@@ -67,6 +68,7 @@ directory: './db/migrations',
 };
 
 module.exports = { ...baseConfig, ...dbConfig[ENV] };
+```
 
 (if u are using Mac Os delete username and password from test and development)
 
